@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Profile;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 
-class ProfileController extends Controller
+class ProfileIndexController extends Controller
 {
     /**
      * Create a new controller instance.

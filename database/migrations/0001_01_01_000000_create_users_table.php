@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('uf')->nullable();
             $table->string('address')->nullable();
             $table->string('number')->nullable();
+            $table->enum('role', ['administrador', 'operador', 'superusuario'])->default('operador');
             $table->string('image')->default('default.png');
             $table->rememberToken();
             $table->timestamps();

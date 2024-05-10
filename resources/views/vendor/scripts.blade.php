@@ -22,6 +22,7 @@
     });
 
 </script>
+
 {{--mostra mensagem de suceso se existir a variavel sucess--}}
 @if(session('success'))
     <script>

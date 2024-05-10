@@ -3,16 +3,25 @@
 @section('title', 'Perfil')
 
 @section('content_header')
-    <h1>Perfil</h1>
+    <div class="row m-1">
+        <div class="col-2">
+            <h1>Editar</h1>
+        </div>
+        <div class="col-10 text-right">
+            <a href="{{route('user.list')}}" class="btn btn-primary">Voltar</a>
+        </div>
+    </div>
 @stop
 
 @section('content')
     <div class="container">
+
         <div class="main-body">
             <!-- Breadcrumb -->
             <nav aria-label="breadcrumb" class="main-breadcrumb">
-                <ol class="breadcrumb  bg-dark">
-                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Perfil</a></li>
+                <ol class="breadcrumb bg-dark">
+                    <li class="breadcrumb-item"><a href="{{route('user.list')}}">Usuários</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Editar</a></li>
                 </ol>
             </nav>
             <!-- /Breadcrumb -->
@@ -89,8 +98,8 @@
         </div>
     </div>
     <!-- Modal -->
-    @include('admin.profile.modal-profile')
-    @include('admin.profile.modal-password')
-    @include('admin.profile.modal-croppie')
+    @include('admin.user.modal-profile')
+    @include('admin.user.modal-password')
+    @include('admin.user.modal-croppie')
 @stop
 
