@@ -43,6 +43,7 @@ class UserIndexController extends Controller
         try {
             DB::table('users')->where('id', $request->id)->update([
                 'name' => $request->name,
+                'role' => $request->role,
                 'email' => $request->email,
                 'phone' => preg_replace('/[^0-9]/', '', $request->phone),
                 'country' => $request->country,

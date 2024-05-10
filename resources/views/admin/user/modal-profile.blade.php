@@ -18,6 +18,22 @@
                             <input placeholder="Exemplo: Ana Maria Silva" name="name" type="text" class="form-control" id="userName" value="{{$user->name}}">
                         </div>
                         <div class="form-group col">
+                            <label for="role">Perfil</label>
+                            <select name="role" class="form-control" id="role">
+                                @foreach([
+                                    ['id' => 'operador', 'name' => 'Operador'],
+                                    ['id' => 'administrador', 'name' => 'Administrador'],
+                                    ['id' => 'superusuario', 'name' => 'Superusuário']
+                                ] as $role)
+                                    <option value="{{$role['id']}}"
+                                            @if($user->role == $role['id'])
+                                                selected
+                                        @endif>{{$role['name']}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col">
                             <label for="userEmail">Email</label>
                             <input placeholder="Exemplo: exemplo@email.com" name="email" type="email" class="form-control" id="userEmail" value="{{$user->email}}">
                         </div>
