@@ -58,7 +58,7 @@
                     data: {
                         "_token": "{{ csrf_token() }}",
                         "image": image,
-                        "id": {{ $user->id }}
+                        "id": {{ isset($user->id) ? $user->id : 'null' }}
                     },
                     success: function(response) {
                         // Fechar modal e atualizar a imagem no perfil

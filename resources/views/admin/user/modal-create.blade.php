@@ -1,21 +1,20 @@
-<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+<div class="modal fade" id="createProfileModal" tabindex="-1" aria-labelledby="createProfileModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editProfileModalLabel">Editar Perfil</h5>
+                <h5 class="modal-title" id="createProfileModalLabel">Editar Perfil</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <!-- Formulário de Edição -->
-                <form id="editProfileForm" method="post" action="{{ route('user.update') }}">
+                <form id="editProfileForm" method="post" action="{{ route('user.create') }}">
                     @csrf
-                    <input type="hidden" name="id" value="{{ isset($user->id) ? $user->id : '' }}">
                     <div class="row">
                         <div class="form-group col">
                             <label for="userName">Nome Completo</label>
-                            <input placeholder="Exemplo: Ana Maria Silva" name="name" type="text" class="form-control" id="userName" value="{{ isset($user->name) ? $user->name : '' }}">
+                            <input placeholder="Exemplo: Ana Maria Silva" name="name" type="text" class="form-control" id="userName">
                         </div>
                         <div class="form-group col">
                             <label for="role">Perfil</label>
@@ -25,27 +24,27 @@
                                     ['id' => 'administrador', 'name' => 'Administrador'],
                                     ['id' => 'superusuario', 'name' => 'Superusuário']
                                 ] as $role)
-                                    <option value="{{ $role['id'] }}" {{ isset($user->role) && $user->role == $role['id'] ? 'selected' : '' }}>{{ $role['name'] }}</option>
+                                    <option value="{{ $role['id'] }}">{{ $role['name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group col">
                             <label for="userEmail">Email</label>
-                            <input placeholder="Exemplo: exemplo@email.com" name="email" type="email" class="form-control" id="userEmail" value="{{ isset($user->email) ? $user->email : '' }}">
+                            <input placeholder="Exemplo: exemplo@email.com" name="email" type="email" class="form-control" id="userEmail">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="form-group col">
                             <label for="userPhone">Telefone</label>
-                            <input placeholder="Exemplo: (00) 00000-0000" name="phone" type="text" class="form-control phone-mask" id="userPhone" value="{{ isset($user->phone) ? $user->phone : '' }}">
+                            <input placeholder="Exemplo: (00) 00000-0000" name="phone" type="text" class="form-control phone-mask" id="userPhone">
                         </div>
                         <div class="form-group col">
                             <label for="country">Pais</label>
                             <select name="country" class="form-control" id="country">
                                 <option value="">Selecione o Pais</option>
                                 @foreach(\Illuminate\Support\Facades\DB::table('countries')->get()->toArray() as $country)
-                                    <option value="{{ $country->id }}" {{ isset($user->country) && $user->country == $country->id ? 'selected' : '' }}>{{ $country->nome }}</option>
+                                    <option value="{{ $country->id }}">{{ $country->nome }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -57,7 +56,7 @@
                             <select name="uf" class="form-control" id="uf">
                                 <option value="">Selecione o Estado</option>
                                 @foreach(\Illuminate\Support\Facades\DB::table('ufs')->get()->toArray() as $uf)
-                                    <option value="{{ $uf->id }}" {{ isset($user->uf) && $user->uf == $uf->id ? 'selected' : '' }}>{{ $uf->nome }}</option>
+                                    <option value="{{ $uf->id }}">{{ $uf->nome }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -66,7 +65,7 @@
                             <select name="city" class="form-control" id="city">
                                 <option value="">Selecione a Cidade</option>
                                 @foreach(\Illuminate\Support\Facades\DB::table('cities')->get()->toArray() as $city)
-                                    <option value="{{ $city->id }}" {{ isset($user->city) && $user->city == $city->id ? 'selected' : '' }}>{{ $city->nome }}</option>
+                                    <option value="{{ $city->id }}">{{ $city->nome }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -75,11 +74,22 @@
                     <div class="row">
                         <div class="form-group col">
                             <label for="address">Rua</label>
-                            <input placeholder="Exemplo: Rua Paraíba" name="address" type="text" class="form-control" id="address" value="{{ isset($user->address) ? $user->address : '' }}">
+                            <input placeholder="Exemplo: Rua Paraíba" name="address" type="text" class="form-control" id="address">
                         </div>
                         <div class="form-group col">
                             <label for="number">Número</label>
-                            <input placeholder="Exemplo: 133" name="number" type="text" class="form-control number-mask" id="number" value="{{ isset($user->number) ? $user->number : '' }}">
+                            <input placeholder="Exemplo: 133" name="number" type="text" class="form-control number-mask" id="number">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="userName">Senha</label>
+                            <input placeholder="Exemplo: ********" name="password" type="password" class="form-control" id="password">
+                        </div>
+                        <div class="form-group col">
+                            <label for="userName">Confirmação de senha</label>
+                            <input placeholder="Exemplo: ********" name="password-confirm" type="password" class="form-control" id="password-confirm">
                         </div>
                     </div>
 
@@ -94,6 +104,47 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        $('#editProfileForm').submit(function(event) {
+            // Prevenir o envio padrão do formulário
+            event.preventDefault();
+
+            // Capturar os valores dos campos de senha
+            var password = $('#password').val();
+            var confirmPassword = $('#password-confirm').val();
+
+            // Verificar os requisitos da senha
+            var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordRegex.test(password)) {
+                // Se a senha não atende aos requisitos, mostrar um alerta SweetAlert
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Senha Insegura!',
+                    text: 'Sua senha deve ter pelo menos 8 caracteres, incluir uma letra maiúscula, um número e um caractere especial.',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                });
+                return; // Sair da função para não prosseguir para as outras verificações
+            }
+
+            // Verificar se as senhas coincidem
+            if (password === confirmPassword) {
+                // Se as senhas coincidirem, submeter o formulário
+
+                this.submit();
+            } else {
+                // Se as senhas não coincidirem, mostrar um alerta SweetAlert
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro!',
+                    text: 'As senhas não coincidem. Tente novamente.',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    });
+
     $(document).ready(function () {
         function loadStates(countryId, selectedStateId = null) {
             if (countryId) {

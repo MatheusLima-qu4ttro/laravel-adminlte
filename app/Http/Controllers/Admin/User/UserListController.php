@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -25,8 +26,12 @@ class UserListController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function list(Request $request) : \Illuminate\Contracts\Support\Renderable
+    public function list(Request $request) : \Illuminate\Contracts\Support\Renderable|\Illuminate\Http\RedirectResponse
     {
+        if (!Auth::user()->can('isAdmin') && !Auth::user()->can('isSuperUser')) {
+            return redirect()->route('dashboard')->with('error', 'Você não tem permissão para acessar essa página!');
+        }
+
         $users = DB::table('users')
             ->where('name', 'like', '%' . $request->term . '%')
             ->orWhere('email', 'like', '%' . $request->term . '%')
@@ -39,7 +44,8 @@ class UserListController extends Controller
         ]);
     }
 
-/**
+
+    /**
      * Esse metodo deleta um usuario.
      *
      * @return \Illuminate\Http\RedirectResponse

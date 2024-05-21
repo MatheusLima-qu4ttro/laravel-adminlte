@@ -34,6 +34,34 @@ class UserIndexController extends Controller
     }
 
     /**
+     * Esse metodo cria um usuario.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function create(Request $request) : \Illuminate\Http\RedirectResponse
+    {
+        try {
+            $id = DB::table('users')->insertGetId([
+                'name' => $request->name,
+                'role' => $request->role,
+                'email' => $request->email,
+                'phone' => preg_replace('/[^0-9]/', '', $request->phone),
+                'country' => $request->country,
+                'uf' => $request->uf,
+                'city' => $request->city,
+                'address' => $request->address,
+                'number' => $request->number,
+                'password' => Hash::make($request->password),
+            ]);
+
+            return redirect()->route('user.index', ['id' => $id])->with('success', 'Usuário criado com sucesso');
+        }catch (\Exception $e) {
+            return redirect()->route('user.list')->with('error', 'Erro ao atualizar usuário');
+        }
+
+    }
+
+    /**
      * Esse metodo atualiza os dados do usuario selecionado.
      *
      * @return \Illuminate\Http\RedirectResponse
@@ -74,7 +102,7 @@ class UserIndexController extends Controller
                 ->where('id', $request->id)
                 ->update(['password' => Hash::make($request->password)]);
 
-            return redirect()->route('profile')->with('success', 'Senha alterada com sucesso');
+            return redirect()->route('user.index', ['id' => $request->id])->with('success', 'Senha alterada com sucesso');
         } catch (\Exception $e) {
             return redirect()->route('profile')->with('error', 'Erro ao alterar senha: ' . $e->getMessage());
         }
@@ -107,7 +135,7 @@ class UserIndexController extends Controller
                 ->where('id', $request->id)
                 ->update(['image' => $imageName]);
 
-            return redirect()->route('profile')->with('success', 'Imagem alterada com sucesso');
+            return redirect()->route('user.index', ['id' => $request->id])->with('success', 'Imagem alterada com sucesso');
         } catch (\Exception $e) {
             return redirect()->route('profile')->with('error', 'Erro ao alterar imagem: ' . $e->getMessage());
         }

@@ -11,7 +11,7 @@
                 <!-- Formulário de Edição -->
                 <form id="changePasswordForm" method="post" action="{{route("user.change-password")}}">
                     @csrf
-                    <input type="hidden" name="id" value="{{$user->id}}">
+                    <input type="hidden" name="id" value="{{ isset($user->id) ? $user->id : '' }}">
                     <div class="row">
                         <div class="form-group col">
                             <label for="userName">Senha</label>

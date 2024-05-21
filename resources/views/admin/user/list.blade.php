@@ -17,8 +17,13 @@
         <div class="main-body">
             <!-- Breadcrumb -->
             <nav aria-label="breadcrumb" class="main-breadcrumb">
-                <ol class="breadcrumb bg-dark">
-                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Usuários</a></li>
+                <ol class="breadcrumb bg-dark d-flex justify-content-between">
+                    <li class="breadcrumb-item active">
+                        <a href="javascript:void(0)">Usuários</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-info ml-auto" data-toggle="modal" data-target="#createProfileModal">Adicionar</a>
+                    </li>
                 </ol>
             </nav>
             <!-- /Breadcrumb -->
@@ -27,10 +32,11 @@
                 <div class="col-md-12">
                     <div class="card mb-3">
                         <div class="card-body">
-                            <form method="GET" action="{{ route('user.list') }}">
-                                <input type="text" name="term" placeholder="Pesquisar..." class="form-control mb-3" value="{{ request('term') }}">
-                                <button type="submit" class="btn btn-primary mb-3">Pesquisar</button>
-                            </form>
+                                <form method="GET" action="{{ route('user.list') }}" class="row">
+                                    <input type="text" name="term" placeholder="Pesquisar..." class="form-control m-1 col-9" value="{{ request('term') }}">
+                                    <button type="submit" class="btn btn-primary m-1 col-2"><i class="fa fa-search"></i> Pesquisar</button>
+                                </form>
+
                             <div class="table-responsive">
                                 <table id="example" class="table table-striped table-bordered" style="width:100%">
                                     <thead>
@@ -45,14 +51,14 @@
                                     <tbody>
                                     @foreach($users as $user)
                                         <tr>
-                                            <td>
+                                            <td class="text-center">
                                                 <img src="{{ asset('vendor/adminlte/'.$user->image) }}" alt="Foto de perfil" class="img-thumbnail" style="width: 50px; height: 50px;">
                                             </td>
                                             <td>{{$user->name}}</td>
                                             <td>{{$user->email}}</td>
                                             <td>{{$user->role}}</td>
                                             <td>
-                                                <a href="/user/index?id={{$user->id}}" class="btn btn-primary">Editar</a>
+                                                <a href="{{ route('user.index', ['id' => $user->id]) }}" class="btn btn-primary">Editar</a>
                                                 <a href="{{route('user.delete', $user->id)}}" class="btn btn-danger delete">Deletar</a>
                                             </td>
                                         </tr>
@@ -68,6 +74,8 @@
             </div>
         </div>
     </div>
+
+    @include('admin.user.modal-create')
 @stop
 
 @section('js')

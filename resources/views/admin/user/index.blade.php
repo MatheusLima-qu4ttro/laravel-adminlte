@@ -31,11 +31,11 @@
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
                                 <div class="profile-pic">
-                                    <img src="{{ asset('vendor/adminlte/'.$user->image) }}" alt="Admin" class="rounded-circle" width="150">
+                                    <img src="{{ isset($user) && $user->image ? asset('vendor/adminlte/'.$user->image) : asset('vendor/adminlte/default-image.jpg') }}" alt="Admin" class="rounded-circle" width="150">
                                     <i class="edit-icon fa-solid fa-pen-to-square" id="edit-profile-pic"></i>
                                 </div>
                                 <div class="mt-3">
-                                    <h4>{{ $user->name }}</h4>
+                                    <h4>{{ isset($user->name) ? $user->name : 'Não informado' }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                                     <h6 class="mb-0">Nome Completo</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{$user->name}}
+                                    {{ isset($user->name) ? $user->name : 'Não informado' }}
                                 </div>
                             </div>
                             <hr>
@@ -58,7 +58,7 @@
                                     <h6 class="mb-0">Email</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{$user->email}}
+                                    {{ isset($user->email) ? $user->email : 'Não informado' }}
                                 </div>
                             </div>
                             <hr>
@@ -67,7 +67,7 @@
                                     <h6 class="mb-0">Telefone</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{ $user->phone ? '(' . substr($user->phone, 0, 2) . ') ' . substr($user->phone, 2, 5) . '-' . substr($user->phone, 7) : 'Não informado' }}
+                                    {{ isset($user->phone) ? '(' . substr($user->phone, 0, 2) . ') ' . substr($user->phone, 2, 5) . '-' . substr($user->phone, 7) : 'Não informado' }}
                                 </div>
                             </div>
                             <hr>
@@ -76,12 +76,11 @@
                                     <h6 class="mb-0">Endereço</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    @if($user->country && $user->city && $user->uf && $user->address && $user->number)
-                                        {{$user->address . ', ' . $user->number . ' - ' . DB::table('ufs')->find($user->uf)->nome . ', ' . DB::table('cities')->find($user->city)->nome . ', ' .DB::table('countries')->find($user->country)->nome  }}
+                                    @if(isset($user->country, $user->city, $user->uf, $user->address, $user->number))
+                                        {{ $user->address . ', ' . $user->number . ' - ' . DB::table('ufs')->find($user->uf)->nome . ', ' . DB::table('cities')->find($user->city)->nome . ', ' . DB::table('countries')->find($user->country)->nome }}
                                     @else
                                         Não informado
                                     @endif
-
                                 </div>
                             </div>
                             <hr>
